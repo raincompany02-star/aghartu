@@ -50,7 +50,7 @@
             <span class="text-yellow-400 font-medium text-sm">ТЗ</span>
             <span id="cnt-todo" class="ml-auto text-xs bg-gray-600 px-2 py-0.5 rounded-full text-gray-300">0</span>
           </div>
-          <div id="col-todo" class="space-y-2 min-h-24 drop-zone"></div>
+          <div id="col-todo" class="space-y-2 min-h-16"></div>
         </div>
         <div class="kanban-col bg-gray-700/60 rounded-lg p-3" ondragover="dragOver(event)" ondrop="drop(event,'process')" ondragleave="dragLeave(event)">
           <div class="flex items-center gap-2 mb-3">
@@ -58,7 +58,7 @@
             <span class="text-blue-400 font-medium text-sm">Процесс</span>
             <span id="cnt-process" class="ml-auto text-xs bg-gray-600 px-2 py-0.5 rounded-full text-gray-300">0</span>
           </div>
-          <div id="col-process" class="space-y-2 min-h-24 drop-zone"></div>
+          <div id="col-process" class="space-y-2 min-h-16"></div>
         </div>
         <div class="kanban-col bg-gray-700/60 rounded-lg p-3" ondragover="dragOver(event)" ondrop="drop(event,'done')" ondragleave="dragLeave(event)">
           <div class="flex items-center gap-2 mb-3">
@@ -66,7 +66,7 @@
             <span class="text-green-400 font-medium text-sm">Дайын</span>
             <span id="cnt-done" class="ml-auto text-xs bg-gray-600 px-2 py-0.5 rounded-full text-gray-300">0</span>
           </div>
-          <div id="col-done" class="space-y-2 min-h-24 drop-zone"></div>
+          <div id="col-done" class="space-y-2 min-h-16"></div>
         </div>
       </div>
     </div>
@@ -108,7 +108,7 @@
   <style>
     .kanban-col { transition: background 0.15s; }
     .kanban-col.drag-over { background: rgba(59,130,246,0.15); outline: 2px dashed #3b82f6; }
-    .task-card { cursor: grab; transition: opacity 0.15s, transform 0.15s; }
+    .task-card { cursor: grab; }
     .task-card:active { cursor: grabbing; }
     .task-card.dragging { opacity: 0.4; transform: scale(0.97); }
   </style>
@@ -167,14 +167,8 @@
     }
 
     let dragId = null;
-
-    function dragOver(e) {
-      e.preventDefault();
-      e.currentTarget.classList.add('drag-over');
-    }
-    function dragLeave(e) {
-      e.currentTarget.classList.remove('drag-over');
-    }
+    function dragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+    function dragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
     async function drop(e, status) {
       e.preventDefault();
       e.currentTarget.classList.remove('drag-over');
@@ -186,19 +180,19 @@
     function card(t) {
       const typeBadge = t.type === 'weekly'
         ? '<span class="text-purple-300 bg-purple-900 text-xs px-1.5 py-0.5 rounded ml-1">апт</span>' : '';
-      const statusDot = { todo: 'bg-yellow-400', process: 'bg-blue-400', done: 'bg-green-400' }[t.status];
+      const next = { todo: 'process', process: 'done' }[t.status];
+      const lbl  = { todo: '▶ Бастау', process: '✓ Аяқтау' }[t.status];
       return `<div class="task-card bg-gray-600 hover:bg-gray-500 rounded-lg p-3 select-none"
           draggable="true"
           ondragstart="dragId=${t.id};this.classList.add('dragging')"
           ondragend="this.classList.remove('dragging')">
-        <div class="flex items-start gap-2 mb-1">
-          <span class="w-1.5 h-1.5 rounded-full ${statusDot} mt-1.5 flex-shrink-0"></span>
-          <div class="text-sm font-medium">${t.title}${typeBadge}</div>
-        </div>
-        ${t.description ? `<div class="text-xs text-gray-400 mb-1 ml-3.5">${t.description}</div>` : ''}
-        ${t.due_date ? `<div class="text-xs text-gray-500 ml-3.5">📅 ${t.due_date}</div>` : ''}
+        <div class="text-sm font-medium mb-1">${t.title}${typeBadge}</div>
+        ${t.description ? `<div class="text-xs text-gray-400 mb-1">${t.description}</div>` : ''}
+        ${t.due_date ? `<div class="text-xs text-gray-500 mb-1">📅 ${t.due_date}</div>` : ''}
         ${t.created_by_name && t.created_by_name !== localStorage.getItem('name')
-          ? `<div class="text-xs text-gray-600 ml-3.5 mt-1">от: ${t.created_by_name}</div>` : ''}
+          ? `<div class="text-xs text-gray-500 mb-1">от: ${t.created_by_name}</div>` : ''}
+        ${next ? `<button onclick="event.stopPropagation();setStatus(${t.id},'${next}')"
+          class="mt-1 w-full text-xs bg-blue-700 hover:bg-blue-600 px-2 py-1.5 rounded transition">${lbl}</button>` : ''}
       </div>`;
     }
 
@@ -209,7 +203,7 @@
         const f = tasks.filter(t => t.status === s);
         document.getElementById(`col-${s}`).innerHTML = f.length
           ? f.map(card).join('')
-          : '<div class="text-center text-gray-600 text-xs py-6">Картаны осыған сүйреңіз</div>';
+          : '<div class="text-center text-gray-600 text-xs py-4">Бос</div>';
         document.getElementById(`cnt-${s}`).textContent = f.length;
       });
     }
