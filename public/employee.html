@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ағарту — Қызметкер</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen text-white">
+  <header class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex justify-between items-center">
+    <div>
+      <span class="text-blue-400 font-bold text-lg">Ағарту</span>
+      <span class="text-gray-500 mx-2">|</span>
+      <span id="username" class="text-gray-300 text-sm"></span>
+    </div>
+    <button onclick="logout()" class="text-gray-500 hover:text-white text-sm transition">Шығу</button>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-6 space-y-5">
+
+    <!-- Жұмыс уақыты -->
+    <div class="bg-gray-800 rounded-xl p-5">
+      <h2 class="font-semibold text-gray-200 mb-4">Жұмыс уақыты</h2>
+      <div class="flex gap-3 mb-3">
+        <button id="btn-in" onclick="checkIn()"
+          class="flex-1 bg-green-600 hover:bg-green-500 py-3 rounded-lg font-bold transition">
+          ✅ Жұмысқа келдім
+        </button>
+        <button id="btn-out" onclick="checkOut()"
+          class="flex-1 bg-red-600 hover:bg-red-500 py-3 rounded-lg font-bold transition">
+          🔴 Жұмыс бітті
+        </button>
+      </div>
+      <p id="att-info" class="text-sm text-gray-400"></p>
+    </div>
+
+    <!-- Канбан -->
+    <div class="bg-gray-800 rounded-xl p-5">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="font-semibold text-gray-200">Тапсырмалар</h2>
+        <button onclick="openModal()"
+          class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-sm font-medium transition">
+          + Өз тапсырма
+        </button>
+      </div>
+      <div class="grid grid-cols-3 gap-3">
+        <div class="kanban-col bg-gray-700/60 rounded-lg p-3" ondragover="dragOver(event)" ondrop="drop(event,'todo')" ondragleave="dragLeave(event)">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+            <span class="text-yellow-400 font-medium text-sm">ТЗ</span>
+            <span id="cnt-todo" class="ml-auto text-xs bg-gray-600 px-2 py-0.5 rounded-full text-gray-300">0</span>
+          </div>
+          <div id="col-todo" class="space-y-2 min-h-24 drop-zone"></div>
+        </div>
+        <div class="kanban-col bg-gray-700/60 rounded-lg p-3" ondragover="dragOver(event)" ondrop="drop(event,'process')" ondragleave="dragLeave(event)">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+            <span class="text-blue-400 font-medium text-sm">Процесс</span>
+            <span id="cnt-process" class="ml-auto text-xs bg-gray-600 px-2 py-0.5 rounded-full text-gray-300">0</span>
+          </div>
+          <div id="col-process" class="space-y-2 min-h-24 drop-zone"></div>
+        </div>
+        <div class="kanban-col bg-gray-700/60 rounded-lg p-3" ondragover="dragOver(event)" ondrop="drop(event,'done')" ondragleave="dragLeave(event)">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-2 h-2 rounded-full bg-green-400"></span>
+            <span class="text-green-400 font-medium text-sm">Дайын</span>
+            <span id="cnt-done" class="ml-auto text-xs bg-gray-600 px-2 py-0.5 rounded-full text-gray-300">0</span>
+          </div>
+          <div id="col-done" class="space-y-2 min-h-24 drop-zone"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Отчет -->
+    <div class="bg-gray-800 rounded-xl p-5">
+      <h2 class="font-semibold text-gray-200 mb-3">Күндік отчет</h2>
+      <textarea id="report-text" rows="4" placeholder="Бүгін не жасадыңыз?.."
+        class="w-full bg-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 resize-none mb-3"></textarea>
+      <div class="flex items-center gap-3">
+        <button onclick="submitReport()"
+          class="bg-blue-600 hover:bg-blue-500 px-5 py-2 rounded-lg text-sm font-medium transition">
+          Жіберу
+        </button>
+        <p id="rep-msg" class="text-sm text-gray-400"></p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div id="modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+    <div class="bg-gray-800 rounded-xl p-6 w-full max-w-sm mx-4">
+      <h3 class="font-semibold mb-4">Жаңа тапсырма</h3>
+      <input id="m-title" type="text" placeholder="Атауы"
+        class="w-full bg-gray-700 rounded-lg px-4 py-3 text-sm mb-3 outline-none focus:ring-2 focus:ring-blue-500">
+      <textarea id="m-desc" rows="2" placeholder="Сипаттама"
+        class="w-full bg-gray-700 rounded-lg px-4 py-3 text-sm mb-3 outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+      <input id="m-date" type="date"
+        class="w-full bg-gray-700 rounded-lg px-4 py-3 text-sm mb-4 outline-none focus:ring-2 focus:ring-blue-500">
+      <div class="flex gap-3">
+        <button onclick="closeModal()"
+          class="flex-1 bg-gray-600 hover:bg-gray-500 py-2 rounded-lg text-sm transition">Болдырмау</button>
+        <button onclick="createTask()"
+          class="flex-1 bg-blue-600 hover:bg-blue-500 py-2 rounded-lg text-sm font-medium transition">Жасау</button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .kanban-col { transition: background 0.15s; }
+    .kanban-col.drag-over { background: rgba(59,130,246,0.15); outline: 2px dashed #3b82f6; }
+    .task-card { cursor: grab; transition: opacity 0.15s, transform 0.15s; }
+    .task-card:active { cursor: grabbing; }
+    .task-card.dragging { opacity: 0.4; transform: scale(0.97); }
+  </style>
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/';
+    document.getElementById('username').textContent = localStorage.getItem('name') || '';
+
+    const h = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+    const api = (url, opt = {}) => fetch(url, { ...opt, headers: { ...h, ...opt.headers } });
+
+    function logout() { localStorage.clear(); window.location.href = '/'; }
+
+    async function loadAtt() {
+      const r = await api('/api/attendance/today');
+      const d = await r.json();
+      const info = document.getElementById('att-info');
+      const bi = document.getElementById('btn-in');
+      const bo = document.getElementById('btn-out');
+      if (d.check_in) {
+        bi.disabled = true;
+        bi.className = 'flex-1 bg-gray-600 py-3 rounded-lg font-bold opacity-40 cursor-not-allowed';
+        const t1 = new Date(d.check_in).toLocaleTimeString('kk-KZ', { hour: '2-digit', minute: '2-digit' });
+        info.textContent = `Келу: ${t1}`;
+      }
+      if (d.check_out) {
+        bo.disabled = true;
+        bo.className = 'flex-1 bg-gray-600 py-3 rounded-lg font-bold opacity-40 cursor-not-allowed';
+        const t2 = new Date(d.check_out).toLocaleTimeString('kk-KZ', { hour: '2-digit', minute: '2-digit' });
+        info.textContent += `  →  Кету: ${t2}`;
+      }
+    }
+
+    function geo() {
+      return new Promise(res => navigator.geolocation
+        ? navigator.geolocation.getCurrentPosition(p => res({ lat: p.coords.latitude, lon: p.coords.longitude }), () => res({}))
+        : res({})
+      );
+    }
+
+    async function checkIn() {
+      const g = await geo();
+      const r = await api('/api/attendance/checkin', { method: 'POST', body: JSON.stringify(g) });
+      const d = await r.json();
+      if (!r.ok) return alert(d.error);
+      loadAtt();
+    }
+
+    async function checkOut() {
+      const g = await geo();
+      const r = await api('/api/attendance/checkout', { method: 'POST', body: JSON.stringify(g) });
+      const d = await r.json();
+      if (!r.ok) return alert(d.error);
+      loadAtt();
+    }
+
+    let dragId = null;
+
+    function dragOver(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('drag-over');
+    }
+    function dragLeave(e) {
+      e.currentTarget.classList.remove('drag-over');
+    }
+    async function drop(e, status) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('drag-over');
+      if (dragId === null) return;
+      await setStatus(dragId, status);
+      dragId = null;
+    }
+
+    function card(t) {
+      const typeBadge = t.type === 'weekly'
+        ? '<span class="text-purple-300 bg-purple-900 text-xs px-1.5 py-0.5 rounded ml-1">апт</span>' : '';
+      const statusDot = { todo: 'bg-yellow-400', process: 'bg-blue-400', done: 'bg-green-400' }[t.status];
+      return `<div class="task-card bg-gray-600 hover:bg-gray-500 rounded-lg p-3 select-none"
+          draggable="true"
+          ondragstart="dragId=${t.id};this.classList.add('dragging')"
+          ondragend="this.classList.remove('dragging')">
+        <div class="flex items-start gap-2 mb-1">
+          <span class="w-1.5 h-1.5 rounded-full ${statusDot} mt-1.5 flex-shrink-0"></span>
+          <div class="text-sm font-medium">${t.title}${typeBadge}</div>
+        </div>
+        ${t.description ? `<div class="text-xs text-gray-400 mb-1 ml-3.5">${t.description}</div>` : ''}
+        ${t.due_date ? `<div class="text-xs text-gray-500 ml-3.5">📅 ${t.due_date}</div>` : ''}
+        ${t.created_by_name && t.created_by_name !== localStorage.getItem('name')
+          ? `<div class="text-xs text-gray-600 ml-3.5 mt-1">от: ${t.created_by_name}</div>` : ''}
+      </div>`;
+    }
+
+    async function loadTasks() {
+      const r = await api('/api/tasks');
+      const tasks = await r.json();
+      ['todo','process','done'].forEach(s => {
+        const f = tasks.filter(t => t.status === s);
+        document.getElementById(`col-${s}`).innerHTML = f.length
+          ? f.map(card).join('')
+          : '<div class="text-center text-gray-600 text-xs py-6">Картаны осыған сүйреңіз</div>';
+        document.getElementById(`cnt-${s}`).textContent = f.length;
+      });
+    }
+
+    async function setStatus(id, status) {
+      await api(`/api/tasks/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) });
+      loadTasks();
+    }
+
+    function openModal() {
+      document.getElementById('m-date').value = new Date().toISOString().slice(0,10);
+      document.getElementById('modal').classList.remove('hidden');
+    }
+    function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+
+    async function createTask() {
+      const title = document.getElementById('m-title').value.trim();
+      if (!title) return alert('Атауын енгізіңіз');
+      await api('/api/tasks', { method: 'POST', body: JSON.stringify({
+        title,
+        description: document.getElementById('m-desc').value,
+        due_date: document.getElementById('m-date').value,
+        type: 'personal'
+      })});
+      document.getElementById('m-title').value = '';
+      document.getElementById('m-desc').value = '';
+      closeModal();
+      loadTasks();
+    }
+
+    async function submitReport() {
+      const content = document.getElementById('report-text').value.trim();
+      const r = await api('/api/reports', { method: 'POST', body: JSON.stringify({ content }) });
+      const d = await r.json();
+      const el = document.getElementById('rep-msg');
+      if (!r.ok) { el.textContent = d.error; el.className = 'text-sm text-red-400'; }
+      else {
+        el.textContent = '✓ Отчет жіберілді';
+        el.className = 'text-sm text-green-400';
+        document.getElementById('report-text').value = '';
+        setTimeout(() => el.textContent = '', 3000);
+      }
+    }
+
+    loadAtt();
+    loadTasks();
+  </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ағарту — Кіру</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center">
+  <div class="bg-gray-800 rounded-2xl p-8 w-full max-w-md shadow-2xl">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-white mb-1">Ағарту</h1>
+      <p class="text-gray-400 text-sm">Ішкі жұмыс платформасы</p>
+    </div>
+
+    <div class="flex mb-6 bg-gray-700 rounded-lg p-1">
+      <button onclick="showTab('login')" id="tab-login"
+        class="flex-1 py-2 rounded-md text-white font-medium bg-blue-600 transition text-sm">Кіру</button>
+      <button onclick="showTab('register')" id="tab-register"
+        class="flex-1 py-2 rounded-md text-gray-400 font-medium transition text-sm">Тіркелу</button>
+    </div>
+
+    <div id="login-form">
+      <input id="l-phone" type="tel" placeholder="+7 700 000 0000"
+        class="w-full bg-gray-700 text-white rounded-lg px-4 py-3 mb-3 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+      <input id="l-pass" type="password" placeholder="Пароль"
+        class="w-full bg-gray-700 text-white rounded-lg px-4 py-3 mb-4 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+      <button onclick="login()"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">Кіру</button>
+    </div>
+
+    <div id="register-form" class="hidden">
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <input id="r-first" type="text" placeholder="Аты"
+          class="bg-gray-700 text-white rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+        <input id="r-last" type="text" placeholder="Тегі"
+          class="bg-gray-700 text-white rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+      </div>
+      <input id="r-phone" type="tel" placeholder="+7 700 000 0000"
+        class="w-full bg-gray-700 text-white rounded-lg px-4 py-3 mb-3 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+      <input id="r-pass" type="password" placeholder="Пароль (кемінде 6 таңба)"
+        class="w-full bg-gray-700 text-white rounded-lg px-4 py-3 mb-3 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+      <select id="r-role"
+        class="w-full bg-gray-700 text-white rounded-lg px-4 py-3 mb-4 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+        <option value="employee">Қызметкер</option>
+        <option value="manager">Бөлімбас</option>
+        <option value="director">Операционный директор</option>
+      </select>
+      <button onclick="register()"
+        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition">Тіркелу</button>
+    </div>
+
+    <p id="msg" class="text-center mt-4 text-sm text-red-400 min-h-5"></p>
+  </div>
+
+  <script>
+    if (localStorage.getItem('token')) {
+      const r = localStorage.getItem('role');
+      window.location.href = r === 'manager' ? '/manager' : r === 'director' ? '/director' : '/employee';
+    }
+
+    function showTab(tab) {
+      const isLogin = tab === 'login';
+      document.getElementById('login-form').classList.toggle('hidden', !isLogin);
+      document.getElementById('register-form').classList.toggle('hidden', isLogin);
+      document.getElementById('tab-login').className = `flex-1 py-2 rounded-md font-medium transition text-sm ${isLogin ? 'text-white bg-blue-600' : 'text-gray-400'}`;
+      document.getElementById('tab-register').className = `flex-1 py-2 rounded-md font-medium transition text-sm ${!isLogin ? 'text-white bg-blue-600' : 'text-gray-400'}`;
+      document.getElementById('msg').textContent = '';
+    }
+
+    function setMsg(text, ok) {
+      const el = document.getElementById('msg');
+      el.textContent = text;
+      el.className = `text-center mt-4 text-sm ${ok ? 'text-green-400' : 'text-red-400'}`;
+    }
+
+    async function login() {
+      const phone = document.getElementById('l-phone').value.trim();
+      const password = document.getElementById('l-pass').value;
+      const res = await fetch('/api/auth/login', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, password })
+      });
+      const data = await res.json();
+      if (!res.ok) return setMsg(data.error);
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('role', data.role);
+      localStorage.setItem('name', data.name);
+      window.location.href = data.role === 'manager' ? '/manager' : data.role === 'director' ? '/director' : '/employee';
+    }
+
+    async function register() {
+      const body = {
+        first_name: document.getElementById('r-first').value.trim(),
+        last_name:  document.getElementById('r-last').value.trim(),
+        phone:      document.getElementById('r-phone').value.trim(),
+        password:   document.getElementById('r-pass').value,
+        role:       document.getElementById('r-role').value
+      };
+      const res = await fetch('/api/auth/register', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (!res.ok) return setMsg(data.error);
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('role', data.role);
+      localStorage.setItem('name', data.name);
+      window.location.href = data.role === 'manager' ? '/manager' : data.role === 'director' ? '/director' : '/employee';
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        if (!document.getElementById('login-form').classList.contains('hidden')) login();
+        else register();
+      }
+    });
+  </script>
+</body>
+</html>

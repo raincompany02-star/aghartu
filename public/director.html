@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ағарту — Директор</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen text-white">
+  <header class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex justify-between items-center">
+    <div>
+      <span class="text-yellow-400 font-bold text-lg">Ағарту</span>
+      <span class="text-gray-500 mx-2">|</span>
+      <span class="text-gray-300 text-sm">Операционный директор</span>
+    </div>
+    <button onclick="logout()" class="text-gray-500 hover:text-white text-sm transition">Шығу</button>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-6">
+    <!-- Статистика -->
+    <div class="grid grid-cols-4 gap-4 mb-5">
+      <div class="bg-gray-800 rounded-xl p-4 text-center">
+        <div id="s-total" class="text-3xl font-bold">0</div>
+        <div class="text-xs text-gray-500 mt-1">Барлық қызметкер</div>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-4 text-center">
+        <div id="s-present" class="text-3xl font-bold text-green-400">0</div>
+        <div class="text-xs text-gray-500 mt-1">Бүгін жұмыста</div>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-4 text-center">
+        <div id="s-active" class="text-3xl font-bold text-blue-400">0</div>
+        <div class="text-xs text-gray-500 mt-1">Белсенді тапсырма</div>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-4 text-center">
+        <div id="s-done" class="text-3xl font-bold text-purple-400">0</div>
+        <div class="text-xs text-gray-500 mt-1">Аяқталған</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex gap-2 mb-5 flex-wrap">
+      <button onclick="tab('overview')"  id="tb-overview"  class="tab-btn active px-4 py-2 rounded-lg text-sm font-medium transition">Жалпы</button>
+      <button onclick="tab('tasks')"     id="tb-tasks"     class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition">Тапсырмалар</button>
+      <button onclick="tab('attend')"    id="tb-attend"    class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition">Қатысу</button>
+      <button onclick="tab('reports')"   id="tb-reports"   class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition">Отчеттер</button>
+      <button onclick="tab('meetings')"  id="tb-meetings"  class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition">Жиналыс</button>
+    </div>
+
+    <!-- Жалпы -->
+    <div id="pn-overview">
+      <div class="bg-gray-800 rounded-xl p-5">
+        <h2 class="font-semibold mb-4">Барлық қызметкерлер — бүгінгі статус</h2>
+        <div id="overview-list" class="space-y-2"></div>
+      </div>
+    </div>
+
+    <!-- Тапсырмалар -->
+    <div id="pn-tasks" class="hidden">
+      <div class="bg-gray-800 rounded-xl p-5 mb-4">
+        <h2 class="font-semibold mb-4">Тапсырма беру</h2>
+        <div class="grid grid-cols-3 gap-3 mb-3">
+          <input id="d-title" type="text" placeholder="Тапсырма атауы"
+            class="bg-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-yellow-500">
+          <select id="d-emp" class="bg-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-yellow-500">
+            <option value="">Барлығына</option>
+          </select>
+          <select id="d-type" class="bg-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-yellow-500">
+            <option value="daily">Күндік</option>
+            <option value="weekly">Апталық</option>
+          </select>
+        </div>
+        <div class="flex gap-3">
+          <textarea id="d-desc" rows="2" placeholder="Сипаттама"
+            class="flex-1 bg-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-yellow-500 resize-none"></textarea>
+          <button onclick="createTask()"
+            class="bg-yellow-600 hover:bg-yellow-500 px-6 rounded-lg text-sm font-medium transition self-stretch">Жіберу</button>
+        </div>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-5">
+        <h2 class="font-semibold mb-4">Барлық тапсырмалар</h2>
+        <div class="grid grid-cols-3 gap-3">
+          <div class="bg-gray-700/60 rounded-lg p-3">
+            <div class="text-yellow-400 text-sm font-medium mb-3">ТЗ</div>
+            <div id="d-todo" class="space-y-2 min-h-16"></div>
+          </div>
+          <div class="bg-gray-700/60 rounded-lg p-3">
+            <div class="text-blue-400 text-sm font-medium mb-3">Процесс</div>
+            <div id="d-process" class="space-y-2 min-h-16"></div>
+          </div>
+          <div class="bg-gray-700/60 rounded-lg p-3">
+            <div class="text-green-400 text-sm font-medium mb-3">Дайын</div>
+            <div id="d-done" class="space-y-2 min-h-16"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Қатысу -->
+    <div id="pn-attend" class="hidden">
+      <div class="bg-gray-800 rounded-xl p-5">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="font-semibold">Қатысу журналы</h2>
+          <input type="date" id="att-date" onchange="loadAtt()"
+            class="bg-gray-700 rounded-lg px-3 py-2 text-sm outline-none">
+        </div>
+        <div id="att-list" class="space-y-2"></div>
+      </div>
+    </div>
+
+    <!-- Отчеттер -->
+    <div id="pn-reports" class="hidden">
+      <div class="bg-gray-800 rounded-xl p-5">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="font-semibold">Барлық отчеттер</h2>
+          <input type="date" id="rep-date" onchange="loadReps()"
+            class="bg-gray-700 rounded-lg px-3 py-2 text-sm outline-none">
+        </div>
+        <div id="rep-list" class="space-y-3"></div>
+      </div>
+    </div>
+
+    <!-- Жиналыс -->
+    <div id="pn-meetings" class="hidden">
+      <div class="bg-gray-800 rounded-xl p-6">
+        <h2 class="font-semibold mb-5">Google Meet жиналысы</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-gray-700 rounded-xl p-5">
+            <h3 class="font-medium mb-1 text-sm text-gray-300">Жаңа жиналыс бастау</h3>
+            <p class="text-xs text-gray-500 mb-4">Жаңа Meet сілтемесі жасалады</p>
+            <a href="https://meet.google.com/new" target="_blank"
+              class="block w-full bg-blue-600 hover:bg-blue-500 text-white text-center py-3 rounded-lg font-medium transition text-sm">
+              🎥 Google Meet ашу
+            </a>
+          </div>
+          <div class="bg-gray-700 rounded-xl p-5">
+            <h3 class="font-medium mb-1 text-sm text-gray-300">Сілтемемен кіру</h3>
+            <p class="text-xs text-gray-500 mb-4">meet.google.com/... сілтемесін кіргізіңіз</p>
+            <div class="flex gap-2">
+              <input id="meet-link" type="text" placeholder="meet.google.com/xxx-xxxx-xxx"
+                class="flex-1 bg-gray-600 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+              <button onclick="joinMeet()"
+                class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded-lg text-sm transition">Кіру</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    .tab-btn { background: rgb(55 65 81); color: rgb(156 163 175); }
+    .tab-btn.active { background: rgb(202 138 4); color: white; }
+  </style>
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/';
+
+    const h = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+    const api = (url, opt = {}) => fetch(url, { ...opt, headers: { ...h, ...opt.headers } });
+    const TODAY = new Date().toISOString().slice(0, 10);
+
+    function logout() { localStorage.clear(); window.location.href = '/'; }
+
+    function tab(name) {
+      ['overview','tasks','attend','reports','meetings'].forEach(t => {
+        document.getElementById(`tb-${t}`).classList.remove('active');
+        document.getElementById(`pn-${t}`).classList.add('hidden');
+      });
+      document.getElementById(`tb-${name}`).classList.add('active');
+      document.getElementById(`pn-${name}`).classList.remove('hidden');
+      if (name === 'attend') loadAtt();
+      if (name === 'reports') loadReps();
+    }
+
+    async function init() {
+      const [ur, tr, ar] = await Promise.all([
+        api('/api/users'),
+        api('/api/tasks'),
+        api(`/api/attendance/all?date=${TODAY}`)
+      ]);
+      const users = await ur.json();
+      const tasks = await tr.json();
+      const att   = await ar.json();
+
+      document.getElementById('s-total').textContent = users.length;
+      document.getElementById('s-present').textContent = att.filter(a => a.check_in && !a.check_out).length;
+      document.getElementById('s-active').textContent = tasks.filter(t => t.status !== 'done').length;
+      document.getElementById('s-done').textContent = tasks.filter(t => t.status === 'done').length;
+
+      const attMap = Object.fromEntries(att.map(a => [a.user_id, a]));
+      document.getElementById('overview-list').innerHTML = users.map(u => {
+        const a = attMap[u.id];
+        const st = a?.check_out ? '🔴 Кетті' : a?.check_in ? '🟢 Жұмыста' : '⚫ Жоқ';
+        const ci = a?.check_in ? new Date(a.check_in).toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit' }) : '';
+        const rl = { director:'Директор', manager:'Бөлімбас', employee:'Қызметкер' }[u.role];
+        return `<div class="bg-gray-700 rounded-lg px-4 py-3 flex justify-between items-center">
+          <div>
+            <span class="font-medium text-sm">${u.first_name} ${u.last_name}</span>
+            <span class="text-xs text-gray-500 ml-2">${rl}</span>
+            ${ci ? `<span class="text-xs text-gray-500 ml-2">• ${ci}</span>` : ''}
+          </div>
+          <span class="text-sm">${st}</span>
+        </div>`;
+      }).join('');
+
+      const sel = document.getElementById('d-emp');
+      users.forEach(u => {
+        const o = document.createElement('option');
+        o.value = u.id;
+        o.textContent = `${u.first_name} ${u.last_name}`;
+        sel.appendChild(o);
+      });
+
+      ['todo','process','done'].forEach(s => {
+        const f = tasks.filter(t => t.status === s);
+        document.getElementById(`d-${s}`).innerHTML = f.length
+          ? f.map(t => `<div class="bg-gray-600 rounded-lg p-3 text-sm">
+              <div class="font-medium">${t.title}</div>
+              ${t.assigned_to_name ? `<div class="text-xs text-gray-400 mt-1">👤 ${t.assigned_to_name}</div>` : ''}
+              ${t.created_by_name ? `<div class="text-xs text-gray-500">от: ${t.created_by_name}</div>` : ''}
+            </div>`).join('')
+          : '<div class="text-center text-gray-600 text-xs py-4">Бос</div>';
+      });
+    }
+
+    async function createTask() {
+      const title = document.getElementById('d-title').value.trim();
+      if (!title) return alert('Тақырып енгізіңіз');
+      await api('/api/tasks', { method: 'POST', body: JSON.stringify({
+        title,
+        description: document.getElementById('d-desc').value,
+        assigned_to: document.getElementById('d-emp').value || null,
+        type: document.getElementById('d-type').value
+      })});
+      document.getElementById('d-title').value = '';
+      init();
+    }
+
+    async function loadAtt() {
+      const date = document.getElementById('att-date').value || TODAY;
+      const r = await api(`/api/attendance/all?date=${date}`);
+      const rows = await r.json();
+      const el = document.getElementById('att-list');
+      if (!rows.length) { el.innerHTML = '<div class="text-gray-500 text-center py-6">Деректер жоқ</div>'; return; }
+      el.innerHTML = rows.map(a => {
+        const ci = a.check_in ? new Date(a.check_in).toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit' }) : '—';
+        const co = a.check_out ? new Date(a.check_out).toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit' }) : '—';
+        const geo = a.check_in_lat
+          ? `<a href="https://maps.google.com/?q=${a.check_in_lat},${a.check_in_lon}" target="_blank" class="text-blue-400 text-xs hover:underline ml-2">📍 Карта</a>` : '';
+        return `<div class="bg-gray-700 rounded-lg px-4 py-3 flex justify-between items-center">
+          <div>
+            <div class="font-medium text-sm">${a.name}</div>
+            <div class="text-xs text-gray-400 mt-0.5">Келу: ${ci} &nbsp;|&nbsp; Кету: ${co}${geo}</div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    async function loadReps() {
+      const date = document.getElementById('rep-date').value || TODAY;
+      const r = await api(`/api/reports/all?date=${date}`);
+      const rows = await r.json();
+      const el = document.getElementById('rep-list');
+      if (!rows.length) { el.innerHTML = '<div class="text-gray-500 text-center py-6">Отчет жоқ</div>'; return; }
+      el.innerHTML = rows.map(rep => `
+        <div class="bg-gray-700 rounded-lg p-4">
+          <div class="flex justify-between text-sm mb-2">
+            <span class="font-medium">${rep.name}</span>
+            <span class="text-gray-500 text-xs">${new Date(rep.created_at).toLocaleString('ru-RU')}</span>
+          </div>
+          <p class="text-gray-300 text-sm leading-relaxed">${rep.content}</p>
+        </div>`).join('');
+    }
+
+    function joinMeet() {
+      let link = document.getElementById('meet-link').value.trim();
+      if (!link) return;
+      if (!link.startsWith('http')) link = 'https://' + link;
+      window.open(link, '_blank');
+    }
+
+    document.getElementById('att-date').value = TODAY;
+    document.getElementById('rep-date').value = TODAY;
+    init();
+  </script>
+</body>
+</html>
