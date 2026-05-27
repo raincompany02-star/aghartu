@@ -154,7 +154,8 @@
 
   <script>
     const token = localStorage.getItem('token');
-    if (!token) window.location.href = '/';
+    const role  = localStorage.getItem('role');
+    if (!token || role !== 'director') window.location.href = '/';
 
     const h = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
     const api = (url, opt = {}) => fetch(url, { ...opt, headers: { ...h, ...opt.headers } });
@@ -174,11 +175,13 @@
     }
 
     async function init() {
+      try {
       const [ur, tr, ar] = await Promise.all([
         api('/api/users'),
         api('/api/tasks'),
         api(`/api/attendance/all?date=${TODAY}`)
       ]);
+      if (!ur.ok) { logout(); return; }
       const users = await ur.json();
       const tasks = await tr.json();
       const att   = await ar.json();
@@ -222,6 +225,7 @@
             </div>`).join('')
           : '<div class="text-center text-gray-600 text-xs py-4">Бос</div>';
       });
+      } catch(e) { logout(); }
     }
 
     async function createTask() {
@@ -282,7 +286,7 @@
 
     document.getElementById('att-date').value = TODAY;
     document.getElementById('rep-date').value = TODAY;
-    init();
+    init().catch(() => { logout(); });
   </script>
 </body>
 </html>

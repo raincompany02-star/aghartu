@@ -31,15 +31,23 @@
 
     <div id="register-form" class="hidden">
       <div class="grid grid-cols-2 gap-3 mb-3">
-        <input id="r-first" type="text" placeholder="Аты"
-          class="bg-gray-700 text-white rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-        <input id="r-last" type="text" placeholder="Тегі"
-          class="bg-gray-700 text-white rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+        <div>
+          <input id="r-first" type="text" placeholder="Аты" oninput="lettersOnly(this)"
+            class="w-full bg-gray-700 text-white rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+          <p class="text-xs text-gray-500 mt-1 ml-1">тек әріп</p>
+        </div>
+        <div>
+          <input id="r-last" type="text" placeholder="Тегі" oninput="lettersOnly(this)"
+            class="w-full bg-gray-700 text-white rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+          <p class="text-xs text-gray-500 mt-1 ml-1">тек әріп</p>
+        </div>
       </div>
-      <input id="r-phone" type="tel" placeholder="+7 700 000 0000"
-        class="w-full bg-gray-700 text-white rounded-lg px-4 py-3 mb-3 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-      <input id="r-pass" type="password" placeholder="Пароль (кемінде 6 таңба)"
-        class="w-full bg-gray-700 text-white rounded-lg px-4 py-3 mb-3 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+      <input id="r-phone" type="tel" placeholder="+7XXXXXXXXXX" oninput="phoneOnly(this)"
+        class="w-full bg-gray-700 text-white rounded-lg px-4 py-3 mb-1 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+      <p class="text-xs text-gray-500 mb-3 ml-1">+7 немесе 8 — 11 сан</p>
+      <input id="r-pass" type="password" placeholder="Пароль"
+        class="w-full bg-gray-700 text-white rounded-lg px-4 py-3 mb-1 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+      <p class="text-xs text-gray-500 mb-3 ml-1">кемінде 6 таңба</p>
       <select id="r-role"
         class="w-full bg-gray-700 text-white rounded-lg px-4 py-3 mb-4 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
         <option value="employee">Қызметкер</option>
@@ -54,6 +62,13 @@
   </div>
 
   <script>
+    function lettersOnly(el) {
+      el.value = el.value.replace(/[^a-zA-ZаәбвгғдеёжзийкқлмнңоөпрстуүұфхһцчшщъыіьэюяА-ЯЁ\s-]/g, '');
+    }
+    function phoneOnly(el) {
+      el.value = el.value.replace(/[^0-9+]/g, '');
+    }
+
     if (localStorage.getItem('token')) {
       const r = localStorage.getItem('role');
       window.location.href = r === 'manager' ? '/manager' : r === 'director' ? '/director' : '/employee';
