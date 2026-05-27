@@ -1,53 +1,53 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="kk">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ағарту — Қызметкер</title>
+  <title>РђТ“Р°СЂС‚Сѓ вЂ” ТљС‹Р·РјРµС‚РєРµСЂ</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 min-h-screen text-white">
   <header class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex justify-between items-center">
     <div>
-      <span class="text-blue-400 font-bold text-lg">Ағарту</span>
+      <span class="text-blue-400 font-bold text-lg">РђТ“Р°СЂС‚Сѓ</span>
       <span class="text-gray-500 mx-2">|</span>
       <span id="username" class="text-gray-300 text-sm"></span>
     </div>
-    <button onclick="logout()" class="text-gray-500 hover:text-white text-sm transition">Шығу</button>
+    <button onclick="logout()" class="text-gray-500 hover:text-white text-sm transition">РЁС‹Т“Сѓ</button>
   </header>
 
   <main class="max-w-5xl mx-auto px-4 py-6 space-y-5">
 
-    <!-- Жұмыс уақыты -->
+    <!-- Р–Т±РјС‹СЃ СѓР°Т›С‹С‚С‹ -->
     <div class="bg-gray-800 rounded-xl p-5">
-      <h2 class="font-semibold text-gray-200 mb-4">Жұмыс уақыты</h2>
+      <h2 class="font-semibold text-gray-200 mb-4">Р–Т±РјС‹СЃ СѓР°Т›С‹С‚С‹</h2>
       <div class="flex gap-3 mb-3">
         <button id="btn-in" onclick="checkIn()"
           class="flex-1 bg-green-600 hover:bg-green-500 py-3 rounded-lg font-bold transition">
-          ✅ Жұмысқа келдім
+          вњ… Р–Т±РјС‹СЃТ›Р° РєРµР»РґС–Рј
         </button>
         <button id="btn-out" onclick="checkOut()"
           class="flex-1 bg-red-600 hover:bg-red-500 py-3 rounded-lg font-bold transition">
-          🔴 Жұмыс бітті
+          рџ”ґ Р–Т±РјС‹СЃ Р±С–С‚С‚С–
         </button>
       </div>
       <p id="att-info" class="text-sm text-gray-400"></p>
     </div>
 
-    <!-- Канбан -->
+    <!-- РљР°РЅР±Р°РЅ -->
     <div class="bg-gray-800 rounded-xl p-5">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="font-semibold text-gray-200">Тапсырмалар</h2>
+        <h2 class="font-semibold text-gray-200">РўР°РїСЃС‹СЂРјР°Р»Р°СЂ</h2>
         <button onclick="openModal()"
           class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-sm font-medium transition">
-          + Өз тапсырма
+          + УЁР· С‚Р°РїСЃС‹СЂРјР°
         </button>
       </div>
       <div class="grid grid-cols-3 gap-3">
         <div class="kanban-col bg-gray-700/60 rounded-lg p-3" ondragover="dragOver(event)" ondrop="drop(event,'todo')" ondragleave="dragLeave(event)">
           <div class="flex items-center gap-2 mb-3">
             <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
-            <span class="text-yellow-400 font-medium text-sm">ТЗ</span>
+            <span class="text-yellow-400 font-medium text-sm">РўР—</span>
             <span id="cnt-todo" class="ml-auto text-xs bg-gray-600 px-2 py-0.5 rounded-full text-gray-300">0</span>
           </div>
           <div id="col-todo" class="space-y-2 min-h-16"></div>
@@ -55,7 +55,7 @@
         <div class="kanban-col bg-gray-700/60 rounded-lg p-3" ondragover="dragOver(event)" ondrop="drop(event,'process')" ondragleave="dragLeave(event)">
           <div class="flex items-center gap-2 mb-3">
             <span class="w-2 h-2 rounded-full bg-blue-400"></span>
-            <span class="text-blue-400 font-medium text-sm">Процесс</span>
+            <span class="text-blue-400 font-medium text-sm">РџСЂРѕС†РµСЃСЃ</span>
             <span id="cnt-process" class="ml-auto text-xs bg-gray-600 px-2 py-0.5 rounded-full text-gray-300">0</span>
           </div>
           <div id="col-process" class="space-y-2 min-h-16"></div>
@@ -63,7 +63,7 @@
         <div class="kanban-col bg-gray-700/60 rounded-lg p-3" ondragover="dragOver(event)" ondrop="drop(event,'done')" ondragleave="dragLeave(event)">
           <div class="flex items-center gap-2 mb-3">
             <span class="w-2 h-2 rounded-full bg-green-400"></span>
-            <span class="text-green-400 font-medium text-sm">Дайын</span>
+            <span class="text-green-400 font-medium text-sm">Р”Р°Р№С‹РЅ</span>
             <span id="cnt-done" class="ml-auto text-xs bg-gray-600 px-2 py-0.5 rounded-full text-gray-300">0</span>
           </div>
           <div id="col-done" class="space-y-2 min-h-16"></div>
@@ -71,15 +71,15 @@
       </div>
     </div>
 
-    <!-- Отчет -->
+    <!-- РћС‚С‡РµС‚ -->
     <div class="bg-gray-800 rounded-xl p-5">
-      <h2 class="font-semibold text-gray-200 mb-3">Күндік отчет</h2>
-      <textarea id="report-text" rows="4" placeholder="Бүгін не жасадыңыз?.."
+      <h2 class="font-semibold text-gray-200 mb-3">РљТЇРЅРґС–Рє РѕС‚С‡РµС‚</h2>
+      <textarea id="report-text" rows="4" placeholder="Р‘ТЇРіС–РЅ РЅРµ Р¶Р°СЃР°РґС‹ТЈС‹Р·?.."
         class="w-full bg-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 resize-none mb-3"></textarea>
       <div class="flex items-center gap-3">
         <button onclick="submitReport()"
           class="bg-blue-600 hover:bg-blue-500 px-5 py-2 rounded-lg text-sm font-medium transition">
-          Жіберу
+          Р–С–Р±РµСЂСѓ
         </button>
         <p id="rep-msg" class="text-sm text-gray-400"></p>
       </div>
@@ -89,18 +89,18 @@
   <!-- Modal -->
   <div id="modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
     <div class="bg-gray-800 rounded-xl p-6 w-full max-w-sm mx-4">
-      <h3 class="font-semibold mb-4">Жаңа тапсырма</h3>
-      <input id="m-title" type="text" placeholder="Атауы"
+      <h3 class="font-semibold mb-4">Р–Р°ТЈР° С‚Р°РїСЃС‹СЂРјР°</h3>
+      <input id="m-title" type="text" placeholder="РђС‚Р°СѓС‹"
         class="w-full bg-gray-700 rounded-lg px-4 py-3 text-sm mb-3 outline-none focus:ring-2 focus:ring-blue-500">
-      <textarea id="m-desc" rows="2" placeholder="Сипаттама"
+      <textarea id="m-desc" rows="2" placeholder="РЎРёРїР°С‚С‚Р°РјР°"
         class="w-full bg-gray-700 rounded-lg px-4 py-3 text-sm mb-3 outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
       <input id="m-date" type="date"
         class="w-full bg-gray-700 rounded-lg px-4 py-3 text-sm mb-4 outline-none focus:ring-2 focus:ring-blue-500">
       <div class="flex gap-3">
         <button onclick="closeModal()"
-          class="flex-1 bg-gray-600 hover:bg-gray-500 py-2 rounded-lg text-sm transition">Болдырмау</button>
+          class="flex-1 bg-gray-600 hover:bg-gray-500 py-2 rounded-lg text-sm transition">Р‘РѕР»РґС‹СЂРјР°Сѓ</button>
         <button onclick="createTask()"
-          class="flex-1 bg-blue-600 hover:bg-blue-500 py-2 rounded-lg text-sm font-medium transition">Жасау</button>
+          class="flex-1 bg-blue-600 hover:bg-blue-500 py-2 rounded-lg text-sm font-medium transition">Р–Р°СЃР°Сѓ</button>
       </div>
     </div>
   </div>
@@ -133,13 +133,13 @@
         bi.disabled = true;
         bi.className = 'flex-1 bg-gray-600 py-3 rounded-lg font-bold opacity-40 cursor-not-allowed';
         const t1 = new Date(d.check_in).toLocaleTimeString('kk-KZ', { hour: '2-digit', minute: '2-digit' });
-        info.textContent = `Келу: ${t1}`;
+        info.textContent = `РљРµР»Сѓ: ${t1}`;
       }
       if (d.check_out) {
         bo.disabled = true;
         bo.className = 'flex-1 bg-gray-600 py-3 rounded-lg font-bold opacity-40 cursor-not-allowed';
         const t2 = new Date(d.check_out).toLocaleTimeString('kk-KZ', { hour: '2-digit', minute: '2-digit' });
-        info.textContent += `  →  Кету: ${t2}`;
+        info.textContent += `  в†’  РљРµС‚Сѓ: ${t2}`;
       }
     }
 
@@ -166,7 +166,7 @@
       loadAtt();
     }
 
-    let dragId = null;
+    var dragId = null;
     function dragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
     function dragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
     async function drop(e, status) {
@@ -179,18 +179,18 @@
 
     function card(t) {
       const typeBadge = t.type === 'weekly'
-        ? '<span class="text-purple-300 bg-purple-900 text-xs px-1.5 py-0.5 rounded ml-1">апт</span>' : '';
+        ? '<span class="text-purple-300 bg-purple-900 text-xs px-1.5 py-0.5 rounded ml-1">Р°РїС‚</span>' : '';
       const next = { todo: 'process', process: 'done' }[t.status];
-      const lbl  = { todo: '▶ Бастау', process: '✓ Аяқтау' }[t.status];
+      const lbl  = { todo: 'в–¶ Р‘Р°СЃС‚Р°Сѓ', process: 'вњ“ РђСЏТ›С‚Р°Сѓ' }[t.status];
       return `<div class="task-card bg-gray-600 hover:bg-gray-500 rounded-lg p-3 select-none"
           draggable="true"
           ondragstart="dragId=${t.id};this.classList.add('dragging')"
           ondragend="this.classList.remove('dragging')">
         <div class="text-sm font-medium mb-1">${t.title}${typeBadge}</div>
         ${t.description ? `<div class="text-xs text-gray-400 mb-1">${t.description}</div>` : ''}
-        ${t.due_date ? `<div class="text-xs text-gray-500 mb-1">📅 ${t.due_date}</div>` : ''}
+        ${t.due_date ? `<div class="text-xs text-gray-500 mb-1">рџ“… ${t.due_date}</div>` : ''}
         ${t.created_by_name && t.created_by_name !== localStorage.getItem('name')
-          ? `<div class="text-xs text-gray-500 mb-1">от: ${t.created_by_name}</div>` : ''}
+          ? `<div class="text-xs text-gray-500 mb-1">РѕС‚: ${t.created_by_name}</div>` : ''}
         ${next ? `<button onclick="event.stopPropagation();setStatus(${t.id},'${next}')"
           class="mt-1 w-full text-xs bg-blue-700 hover:bg-blue-600 px-2 py-1.5 rounded transition">${lbl}</button>` : ''}
       </div>`;
@@ -203,7 +203,7 @@
         const f = tasks.filter(t => t.status === s);
         document.getElementById(`col-${s}`).innerHTML = f.length
           ? f.map(card).join('')
-          : '<div class="text-center text-gray-600 text-xs py-4">Бос</div>';
+          : '<div class="text-center text-gray-600 text-xs py-4">Р‘РѕСЃ</div>';
         document.getElementById(`cnt-${s}`).textContent = f.length;
       });
     }
@@ -221,7 +221,7 @@
 
     async function createTask() {
       const title = document.getElementById('m-title').value.trim();
-      if (!title) return alert('Атауын енгізіңіз');
+      if (!title) return alert('РђС‚Р°СѓС‹РЅ РµРЅРіС–Р·С–ТЈС–Р·');
       await api('/api/tasks', { method: 'POST', body: JSON.stringify({
         title,
         description: document.getElementById('m-desc').value,
@@ -241,7 +241,7 @@
       const el = document.getElementById('rep-msg');
       if (!r.ok) { el.textContent = d.error; el.className = 'text-sm text-red-400'; }
       else {
-        el.textContent = '✓ Отчет жіберілді';
+        el.textContent = 'вњ“ РћС‚С‡РµС‚ Р¶С–Р±РµСЂС–Р»РґС–';
         el.className = 'text-sm text-green-400';
         document.getElementById('report-text').value = '';
         setTimeout(() => el.textContent = '', 3000);
@@ -253,3 +253,4 @@
   </script>
 </body>
 </html>
+
