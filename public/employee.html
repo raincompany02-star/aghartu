@@ -119,7 +119,11 @@
     document.getElementById('username').textContent = localStorage.getItem('name') || '';
 
     const h = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
-    const api = (url, opt = {}) => fetch(url, { ...opt, headers: { ...h, ...opt.headers } });
+    const api = async (url, opt = {}) => {
+      const r = await fetch(url, { ...opt, headers: { ...h, ...opt.headers } });
+      if (r.status === 401) { localStorage.clear(); window.location.href = '/'; }
+      return r;
+    };
 
     function logout() { localStorage.clear(); window.location.href = '/'; }
 

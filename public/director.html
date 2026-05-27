@@ -1,105 +1,105 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="kk">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ағарту — Директор</title>
+  <title>РђТ“Р°СЂС‚Сѓ вЂ” Р”РёСЂРµРєС‚РѕСЂ</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 min-h-screen text-white">
   <header class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex justify-between items-center">
     <div>
-      <span class="text-yellow-400 font-bold text-lg">Ағарту</span>
+      <span class="text-yellow-400 font-bold text-lg">РђТ“Р°СЂС‚Сѓ</span>
       <span class="text-gray-500 mx-2">|</span>
-      <span class="text-gray-300 text-sm">Операционный директор</span>
+      <span class="text-gray-300 text-sm">РћРїРµСЂР°С†РёРѕРЅРЅС‹Р№ РґРёСЂРµРєС‚РѕСЂ</span>
     </div>
-    <button onclick="logout()" class="text-gray-500 hover:text-white text-sm transition">Шығу</button>
+    <button onclick="logout()" class="text-gray-500 hover:text-white text-sm transition">РЁС‹Т“Сѓ</button>
   </header>
 
   <main class="max-w-7xl mx-auto px-4 py-6">
-    <!-- Статистика -->
+    <!-- РЎС‚Р°С‚РёСЃС‚РёРєР° -->
     <div class="grid grid-cols-4 gap-4 mb-5">
       <div class="bg-gray-800 rounded-xl p-4 text-center">
         <div id="s-total" class="text-3xl font-bold">0</div>
-        <div class="text-xs text-gray-500 mt-1">Барлық қызметкер</div>
+        <div class="text-xs text-gray-500 mt-1">Р‘Р°СЂР»С‹Т› Т›С‹Р·РјРµС‚РєРµСЂ</div>
       </div>
       <div class="bg-gray-800 rounded-xl p-4 text-center">
         <div id="s-present" class="text-3xl font-bold text-green-400">0</div>
-        <div class="text-xs text-gray-500 mt-1">Бүгін жұмыста</div>
+        <div class="text-xs text-gray-500 mt-1">Р‘ТЇРіС–РЅ Р¶Т±РјС‹СЃС‚Р°</div>
       </div>
       <div class="bg-gray-800 rounded-xl p-4 text-center">
         <div id="s-active" class="text-3xl font-bold text-blue-400">0</div>
-        <div class="text-xs text-gray-500 mt-1">Белсенді тапсырма</div>
+        <div class="text-xs text-gray-500 mt-1">Р‘РµР»СЃРµРЅРґС– С‚Р°РїСЃС‹СЂРјР°</div>
       </div>
       <div class="bg-gray-800 rounded-xl p-4 text-center">
         <div id="s-done" class="text-3xl font-bold text-purple-400">0</div>
-        <div class="text-xs text-gray-500 mt-1">Аяқталған</div>
+        <div class="text-xs text-gray-500 mt-1">РђСЏТ›С‚Р°Р»Т“Р°РЅ</div>
       </div>
     </div>
 
     <!-- Tabs -->
     <div class="flex gap-2 mb-5 flex-wrap">
-      <button onclick="tab('overview')"  id="tb-overview"  class="tab-btn active px-4 py-2 rounded-lg text-sm font-medium transition">Жалпы</button>
-      <button onclick="tab('tasks')"     id="tb-tasks"     class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition">Тапсырмалар</button>
-      <button onclick="tab('attend')"    id="tb-attend"    class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition">Қатысу</button>
-      <button onclick="tab('reports')"   id="tb-reports"   class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition">Отчеттер</button>
-      <button onclick="tab('meetings')"  id="tb-meetings"  class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition">Жиналыс</button>
+      <button onclick="tab('overview')"  id="tb-overview"  class="tab-btn active px-4 py-2 rounded-lg text-sm font-medium transition">Р–Р°Р»РїС‹</button>
+      <button onclick="tab('tasks')"     id="tb-tasks"     class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition">РўР°РїСЃС‹СЂРјР°Р»Р°СЂ</button>
+      <button onclick="tab('attend')"    id="tb-attend"    class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition">ТљР°С‚С‹СЃСѓ</button>
+      <button onclick="tab('reports')"   id="tb-reports"   class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition">РћС‚С‡РµС‚С‚РµСЂ</button>
+      <button onclick="tab('meetings')"  id="tb-meetings"  class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition">Р–РёРЅР°Р»С‹СЃ</button>
     </div>
 
-    <!-- Жалпы -->
+    <!-- Р–Р°Р»РїС‹ -->
     <div id="pn-overview">
       <div class="bg-gray-800 rounded-xl p-5">
-        <h2 class="font-semibold mb-4">Барлық қызметкерлер — бүгінгі статус</h2>
+        <h2 class="font-semibold mb-4">Р‘Р°СЂР»С‹Т› Т›С‹Р·РјРµС‚РєРµСЂР»РµСЂ вЂ” Р±ТЇРіС–РЅРіС– СЃС‚Р°С‚СѓСЃ</h2>
         <div id="overview-list" class="space-y-2"></div>
       </div>
     </div>
 
-    <!-- Тапсырмалар -->
+    <!-- РўР°РїСЃС‹СЂРјР°Р»Р°СЂ -->
     <div id="pn-tasks" class="hidden">
       <div class="bg-gray-800 rounded-xl p-5 mb-4">
-        <h2 class="font-semibold mb-4">Тапсырма беру</h2>
+        <h2 class="font-semibold mb-4">РўР°РїСЃС‹СЂРјР° Р±РµСЂСѓ</h2>
         <div class="grid grid-cols-3 gap-3 mb-3">
-          <input id="d-title" type="text" placeholder="Тапсырма атауы"
+          <input id="d-title" type="text" placeholder="РўР°РїСЃС‹СЂРјР° Р°С‚Р°СѓС‹"
             class="bg-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-yellow-500">
           <select id="d-emp" class="bg-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-yellow-500">
-            <option value="">Барлығына</option>
+            <option value="">Р‘Р°СЂР»С‹Т“С‹РЅР°</option>
           </select>
           <select id="d-type" class="bg-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-yellow-500">
-            <option value="daily">Күндік</option>
-            <option value="weekly">Апталық</option>
+            <option value="daily">РљТЇРЅРґС–Рє</option>
+            <option value="weekly">РђРїС‚Р°Р»С‹Т›</option>
           </select>
         </div>
         <div class="flex gap-3">
-          <textarea id="d-desc" rows="2" placeholder="Сипаттама"
+          <textarea id="d-desc" rows="2" placeholder="РЎРёРїР°С‚С‚Р°РјР°"
             class="flex-1 bg-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-yellow-500 resize-none"></textarea>
           <button onclick="createTask()"
-            class="bg-yellow-600 hover:bg-yellow-500 px-6 rounded-lg text-sm font-medium transition self-stretch">Жіберу</button>
+            class="bg-yellow-600 hover:bg-yellow-500 px-6 rounded-lg text-sm font-medium transition self-stretch">Р–С–Р±РµСЂСѓ</button>
         </div>
       </div>
       <div class="bg-gray-800 rounded-xl p-5">
-        <h2 class="font-semibold mb-4">Барлық тапсырмалар</h2>
+        <h2 class="font-semibold mb-4">Р‘Р°СЂР»С‹Т› С‚Р°РїСЃС‹СЂРјР°Р»Р°СЂ</h2>
         <div class="grid grid-cols-3 gap-3">
           <div class="bg-gray-700/60 rounded-lg p-3">
-            <div class="text-yellow-400 text-sm font-medium mb-3">ТЗ</div>
+            <div class="text-yellow-400 text-sm font-medium mb-3">РўР—</div>
             <div id="d-todo" class="space-y-2 min-h-16"></div>
           </div>
           <div class="bg-gray-700/60 rounded-lg p-3">
-            <div class="text-blue-400 text-sm font-medium mb-3">Процесс</div>
+            <div class="text-blue-400 text-sm font-medium mb-3">РџСЂРѕС†РµСЃСЃ</div>
             <div id="d-process" class="space-y-2 min-h-16"></div>
           </div>
           <div class="bg-gray-700/60 rounded-lg p-3">
-            <div class="text-green-400 text-sm font-medium mb-3">Дайын</div>
+            <div class="text-green-400 text-sm font-medium mb-3">Р”Р°Р№С‹РЅ</div>
             <div id="d-done" class="space-y-2 min-h-16"></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Қатысу -->
+    <!-- ТљР°С‚С‹СЃСѓ -->
     <div id="pn-attend" class="hidden">
       <div class="bg-gray-800 rounded-xl p-5">
         <div class="flex justify-between items-center mb-4">
-          <h2 class="font-semibold">Қатысу журналы</h2>
+          <h2 class="font-semibold">ТљР°С‚С‹СЃСѓ Р¶СѓСЂРЅР°Р»С‹</h2>
           <input type="date" id="att-date" onchange="loadAtt()"
             class="bg-gray-700 rounded-lg px-3 py-2 text-sm outline-none">
         </div>
@@ -107,11 +107,11 @@
       </div>
     </div>
 
-    <!-- Отчеттер -->
+    <!-- РћС‚С‡РµС‚С‚РµСЂ -->
     <div id="pn-reports" class="hidden">
       <div class="bg-gray-800 rounded-xl p-5">
         <div class="flex justify-between items-center mb-4">
-          <h2 class="font-semibold">Барлық отчеттер</h2>
+          <h2 class="font-semibold">Р‘Р°СЂР»С‹Т› РѕС‚С‡РµС‚С‚РµСЂ</h2>
           <input type="date" id="rep-date" onchange="loadReps()"
             class="bg-gray-700 rounded-lg px-3 py-2 text-sm outline-none">
         </div>
@@ -119,27 +119,27 @@
       </div>
     </div>
 
-    <!-- Жиналыс -->
+    <!-- Р–РёРЅР°Р»С‹СЃ -->
     <div id="pn-meetings" class="hidden">
       <div class="bg-gray-800 rounded-xl p-6">
-        <h2 class="font-semibold mb-5">Google Meet жиналысы</h2>
+        <h2 class="font-semibold mb-5">Google Meet Р¶РёРЅР°Р»С‹СЃС‹</h2>
         <div class="grid grid-cols-2 gap-4">
           <div class="bg-gray-700 rounded-xl p-5">
-            <h3 class="font-medium mb-1 text-sm text-gray-300">Жаңа жиналыс бастау</h3>
-            <p class="text-xs text-gray-500 mb-4">Жаңа Meet сілтемесі жасалады</p>
+            <h3 class="font-medium mb-1 text-sm text-gray-300">Р–Р°ТЈР° Р¶РёРЅР°Р»С‹СЃ Р±Р°СЃС‚Р°Сѓ</h3>
+            <p class="text-xs text-gray-500 mb-4">Р–Р°ТЈР° Meet СЃС–Р»С‚РµРјРµСЃС– Р¶Р°СЃР°Р»Р°РґС‹</p>
             <a href="https://meet.google.com/new" target="_blank"
               class="block w-full bg-blue-600 hover:bg-blue-500 text-white text-center py-3 rounded-lg font-medium transition text-sm">
-              🎥 Google Meet ашу
+              рџЋҐ Google Meet Р°С€Сѓ
             </a>
           </div>
           <div class="bg-gray-700 rounded-xl p-5">
-            <h3 class="font-medium mb-1 text-sm text-gray-300">Сілтемемен кіру</h3>
-            <p class="text-xs text-gray-500 mb-4">meet.google.com/... сілтемесін кіргізіңіз</p>
+            <h3 class="font-medium mb-1 text-sm text-gray-300">РЎС–Р»С‚РµРјРµРјРµРЅ РєС–СЂСѓ</h3>
+            <p class="text-xs text-gray-500 mb-4">meet.google.com/... СЃС–Р»С‚РµРјРµСЃС–РЅ РєС–СЂРіС–Р·С–ТЈС–Р·</p>
             <div class="flex gap-2">
               <input id="meet-link" type="text" placeholder="meet.google.com/xxx-xxxx-xxx"
                 class="flex-1 bg-gray-600 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
               <button onclick="joinMeet()"
-                class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded-lg text-sm transition">Кіру</button>
+                class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded-lg text-sm transition">РљС–СЂСѓ</button>
             </div>
           </div>
         </div>
@@ -158,7 +158,11 @@
     if (!token || role !== 'director') window.location.href = '/';
 
     const h = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
-    const api = (url, opt = {}) => fetch(url, { ...opt, headers: { ...h, ...opt.headers } });
+    const api = async (url, opt = {}) => {
+      const r = await fetch(url, { ...opt, headers: { ...h, ...opt.headers } });
+      if (r.status === 401) { localStorage.clear(); window.location.href = `/`; }
+      return r;
+    };
     const TODAY = new Date().toISOString().slice(0, 10);
 
     function logout() { localStorage.clear(); window.location.href = '/'; }
@@ -194,14 +198,14 @@
       const attMap = Object.fromEntries(att.map(a => [a.user_id, a]));
       document.getElementById('overview-list').innerHTML = users.map(u => {
         const a = attMap[u.id];
-        const st = a?.check_out ? '🔴 Кетті' : a?.check_in ? '🟢 Жұмыста' : '⚫ Жоқ';
+        const st = a?.check_out ? 'рџ”ґ РљРµС‚С‚С–' : a?.check_in ? 'рџџў Р–Т±РјС‹СЃС‚Р°' : 'вљ« Р–РѕТ›';
         const ci = a?.check_in ? new Date(a.check_in).toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit' }) : '';
-        const rl = { director:'Директор', manager:'Бөлімбас', employee:'Қызметкер' }[u.role];
+        const rl = { director:'Р”РёСЂРµРєС‚РѕСЂ', manager:'Р‘У©Р»С–РјР±Р°СЃ', employee:'ТљС‹Р·РјРµС‚РєРµСЂ' }[u.role];
         return `<div class="bg-gray-700 rounded-lg px-4 py-3 flex justify-between items-center">
           <div>
             <span class="font-medium text-sm">${u.first_name} ${u.last_name}</span>
             <span class="text-xs text-gray-500 ml-2">${rl}</span>
-            ${ci ? `<span class="text-xs text-gray-500 ml-2">• ${ci}</span>` : ''}
+            ${ci ? `<span class="text-xs text-gray-500 ml-2">вЂў ${ci}</span>` : ''}
           </div>
           <span class="text-sm">${st}</span>
         </div>`;
@@ -220,17 +224,17 @@
         document.getElementById(`d-${s}`).innerHTML = f.length
           ? f.map(t => `<div class="bg-gray-600 rounded-lg p-3 text-sm">
               <div class="font-medium">${t.title}</div>
-              ${t.assigned_to_name ? `<div class="text-xs text-gray-400 mt-1">👤 ${t.assigned_to_name}</div>` : ''}
-              ${t.created_by_name ? `<div class="text-xs text-gray-500">от: ${t.created_by_name}</div>` : ''}
+              ${t.assigned_to_name ? `<div class="text-xs text-gray-400 mt-1">рџ‘¤ ${t.assigned_to_name}</div>` : ''}
+              ${t.created_by_name ? `<div class="text-xs text-gray-500">РѕС‚: ${t.created_by_name}</div>` : ''}
             </div>`).join('')
-          : '<div class="text-center text-gray-600 text-xs py-4">Бос</div>';
+          : '<div class="text-center text-gray-600 text-xs py-4">Р‘РѕСЃ</div>';
       });
       } catch(e) { logout(); }
     }
 
     async function createTask() {
       const title = document.getElementById('d-title').value.trim();
-      if (!title) return alert('Тақырып енгізіңіз');
+      if (!title) return alert('РўР°Т›С‹СЂС‹Рї РµРЅРіС–Р·С–ТЈС–Р·');
       await api('/api/tasks', { method: 'POST', body: JSON.stringify({
         title,
         description: document.getElementById('d-desc').value,
@@ -246,16 +250,16 @@
       const r = await api(`/api/attendance/all?date=${date}`);
       const rows = await r.json();
       const el = document.getElementById('att-list');
-      if (!rows.length) { el.innerHTML = '<div class="text-gray-500 text-center py-6">Деректер жоқ</div>'; return; }
+      if (!rows.length) { el.innerHTML = '<div class="text-gray-500 text-center py-6">Р”РµСЂРµРєС‚РµСЂ Р¶РѕТ›</div>'; return; }
       el.innerHTML = rows.map(a => {
-        const ci = a.check_in ? new Date(a.check_in).toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit' }) : '—';
-        const co = a.check_out ? new Date(a.check_out).toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit' }) : '—';
+        const ci = a.check_in ? new Date(a.check_in).toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit' }) : 'вЂ”';
+        const co = a.check_out ? new Date(a.check_out).toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit' }) : 'вЂ”';
         const geo = a.check_in_lat
-          ? `<a href="https://maps.google.com/?q=${a.check_in_lat},${a.check_in_lon}" target="_blank" class="text-blue-400 text-xs hover:underline ml-2">📍 Карта</a>` : '';
+          ? `<a href="https://maps.google.com/?q=${a.check_in_lat},${a.check_in_lon}" target="_blank" class="text-blue-400 text-xs hover:underline ml-2">рџ“Ќ РљР°СЂС‚Р°</a>` : '';
         return `<div class="bg-gray-700 rounded-lg px-4 py-3 flex justify-between items-center">
           <div>
             <div class="font-medium text-sm">${a.name}</div>
-            <div class="text-xs text-gray-400 mt-0.5">Келу: ${ci} &nbsp;|&nbsp; Кету: ${co}${geo}</div>
+            <div class="text-xs text-gray-400 mt-0.5">РљРµР»Сѓ: ${ci} &nbsp;|&nbsp; РљРµС‚Сѓ: ${co}${geo}</div>
           </div>
         </div>`;
       }).join('');
@@ -266,7 +270,7 @@
       const r = await api(`/api/reports/all?date=${date}`);
       const rows = await r.json();
       const el = document.getElementById('rep-list');
-      if (!rows.length) { el.innerHTML = '<div class="text-gray-500 text-center py-6">Отчет жоқ</div>'; return; }
+      if (!rows.length) { el.innerHTML = '<div class="text-gray-500 text-center py-6">РћС‚С‡РµС‚ Р¶РѕТ›</div>'; return; }
       el.innerHTML = rows.map(rep => `
         <div class="bg-gray-700 rounded-lg p-4">
           <div class="flex justify-between text-sm mb-2">

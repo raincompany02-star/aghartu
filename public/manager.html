@@ -113,7 +113,11 @@
     if (!token) window.location.href = '/';
 
     const h = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
-    const api = (url, opt = {}) => fetch(url, { ...opt, headers: { ...h, ...opt.headers } });
+    const api = async (url, opt = {}) => {
+      const r = await fetch(url, { ...opt, headers: { ...h, ...opt.headers } });
+      if (r.status === 401) { localStorage.clear(); window.location.href = '/'; }
+      return r;
+    };
     const TODAY = new Date().toISOString().slice(0, 10);
 
     function logout() { localStorage.clear(); window.location.href = '/'; }
