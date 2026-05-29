@@ -172,7 +172,7 @@
 
     var dragId = null;
     function dragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
-    function dragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+    function dragLeave(e) { if (!e.currentTarget.contains(e.relatedTarget)) e.currentTarget.classList.remove('drag-over'); }
     async function drop(e, status) {
       e.preventDefault();
       e.currentTarget.classList.remove('drag-over');
@@ -213,7 +213,11 @@
     }
 
     async function setStatus(id, status) {
-      await api(`/api/tasks/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) });
+      const r = await api(`/api/tasks/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) });
+      if (!r.ok) {
+        const d = await r.json().catch(() => ({}));
+        alert(d.error || 'Қате орын алды');
+      }
       loadTasks();
     }
 
