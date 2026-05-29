@@ -110,7 +110,7 @@
 
   <script>
     const token = localStorage.getItem('token');
-    if (!token) window.location.href = '/';
+    if (!token || localStorage.getItem('role') !== 'manager') { window.location.href = '/'; }
 
     const h = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
     const api = async (url, opt = {}) => {
@@ -166,11 +166,11 @@
 
     function tcard(t) {
       return `<div class="bg-gray-600 rounded-lg p-3 text-sm">
-        <div class="font-medium mb-1">${t.title}
+        <div class="font-medium mb-1">${esc(t.title)}
           ${t.type === 'weekly' ? '<span class="text-xs text-purple-300 bg-purple-900 px-1.5 py-0.5 rounded ml-1">апт</span>' : ''}
         </div>
-        ${t.assigned_to_name ? `<div class="text-xs text-gray-400">👤 ${t.assigned_to_name}</div>` : ''}
-        ${t.due_date ? `<div class="text-xs text-gray-500">📅 ${t.due_date}</div>` : ''}
+        ${t.assigned_to_name ? `<div class="text-xs text-gray-400">👤 ${esc(t.assigned_to_name)}</div>` : ''}
+        ${t.due_date ? `<div class="text-xs text-gray-500">📅 ${esc(t.due_date)}</div>` : ''}
       </div>`;
     }
 
@@ -199,7 +199,7 @@
         const status = a.check_out ? '🔴 Кетті' : a.check_in ? '🟢 Жұмыста' : '⚫ Жоқ';
         return `<div class="bg-gray-700 rounded-lg px-4 py-3 flex justify-between items-center">
           <div>
-            <div class="font-medium text-sm">${a.name}</div>
+            <div class="font-medium text-sm">${esc(a.name)}</div>
             <div class="text-xs text-gray-400 mt-0.5">Келу: ${ci} &nbsp;|&nbsp; Кету: ${co}${geo}</div>
           </div>
           <span class="text-sm">${status}</span>
@@ -216,10 +216,10 @@
       el.innerHTML = rows.map(rep => `
         <div class="bg-gray-700 rounded-lg p-4">
           <div class="flex justify-between text-sm mb-2">
-            <span class="font-medium">${rep.name}</span>
+            <span class="font-medium">${esc(rep.name)}</span>
             <span class="text-gray-500 text-xs">${new Date(rep.created_at).toLocaleString('ru-RU')}</span>
           </div>
-          <p class="text-gray-300 text-sm leading-relaxed">${rep.content}</p>
+          <p class="text-gray-300 text-sm leading-relaxed">${esc(rep.content)}</p>
         </div>`).join('');
     }
 
@@ -231,14 +231,15 @@
         const roleColor = { director: 'bg-yellow-900 text-yellow-300', manager: 'bg-purple-900 text-purple-300', employee: 'bg-gray-600 text-gray-300' }[u.role];
         return `<div class="bg-gray-700 rounded-lg px-4 py-3 flex justify-between items-center">
           <div>
-            <div class="font-medium text-sm">${u.first_name} ${u.last_name}</div>
-            <div class="text-xs text-gray-400">${u.phone}</div>
+            <div class="font-medium text-sm">${esc(u.first_name)} ${esc(u.last_name)}</div>
+            <div class="text-xs text-gray-400">${esc(u.phone)}</div>
           </div>
           <span class="text-xs px-2 py-1 rounded-full ${roleColor}">${roleLabel}</span>
         </div>`;
       }).join('');
     }
 
+    function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
     document.getElementById('att-date').value = TODAY;
     document.getElementById('rep-date').value = TODAY;
     document.getElementById('t-date').value = TODAY;

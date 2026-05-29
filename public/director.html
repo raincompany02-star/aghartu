@@ -176,6 +176,7 @@
       document.getElementById(`pn-${name}`).classList.remove('hidden');
       if (name === 'attend') loadAtt();
       if (name === 'reports') loadReps();
+      if (name === 'tasks' || name === 'overview') init();
     }
 
     async function init() {
@@ -203,7 +204,7 @@
         const rl = { director:'Р”РёСЂРµРєС‚РѕСЂ', manager:'Р‘У©Р»С–РјР±Р°СЃ', employee:'ТљС‹Р·РјРµС‚РєРµСЂ' }[u.role];
         return `<div class="bg-gray-700 rounded-lg px-4 py-3 flex justify-between items-center">
           <div>
-            <span class="font-medium text-sm">${u.first_name} ${u.last_name}</span>
+            <span class="font-medium text-sm">${esc(u.first_name)} ${esc(u.last_name)}</span>
             <span class="text-xs text-gray-500 ml-2">${rl}</span>
             ${ci ? `<span class="text-xs text-gray-500 ml-2">вЂў ${ci}</span>` : ''}
           </div>
@@ -212,6 +213,7 @@
       }).join('');
 
       const sel = document.getElementById('d-emp');
+      sel.options.length = 1;
       users.forEach(u => {
         const o = document.createElement('option');
         o.value = u.id;
@@ -223,13 +225,13 @@
         const f = tasks.filter(t => t.status === s);
         document.getElementById(`d-${s}`).innerHTML = f.length
           ? f.map(t => `<div class="bg-gray-600 rounded-lg p-3 text-sm">
-              <div class="font-medium">${t.title}</div>
-              ${t.assigned_to_name ? `<div class="text-xs text-gray-400 mt-1">рџ‘¤ ${t.assigned_to_name}</div>` : ''}
-              ${t.created_by_name ? `<div class="text-xs text-gray-500">РѕС‚: ${t.created_by_name}</div>` : ''}
+              <div class="font-medium">${esc(t.title)}</div>
+              ${t.assigned_to_name ? `<div class="text-xs text-gray-400 mt-1">рџ‘¤ ${esc(t.assigned_to_name)}</div>` : ''}
+              ${t.created_by_name ? `<div class="text-xs text-gray-500">РѕС‚: ${esc(t.created_by_name)}</div>` : ''}
             </div>`).join('')
           : '<div class="text-center text-gray-600 text-xs py-4">Р‘РѕСЃ</div>';
       });
-      } catch(e) { logout(); }
+      } catch(e) { console.error('init error:', e); }
     }
 
     async function createTask() {
@@ -258,7 +260,7 @@
           ? `<a href="https://maps.google.com/?q=${a.check_in_lat},${a.check_in_lon}" target="_blank" class="text-blue-400 text-xs hover:underline ml-2">рџ“Ќ РљР°СЂС‚Р°</a>` : '';
         return `<div class="bg-gray-700 rounded-lg px-4 py-3 flex justify-between items-center">
           <div>
-            <div class="font-medium text-sm">${a.name}</div>
+            <div class="font-medium text-sm">${esc(a.name)}</div>
             <div class="text-xs text-gray-400 mt-0.5">РљРµР»Сѓ: ${ci} &nbsp;|&nbsp; РљРµС‚Сѓ: ${co}${geo}</div>
           </div>
         </div>`;
@@ -274,10 +276,10 @@
       el.innerHTML = rows.map(rep => `
         <div class="bg-gray-700 rounded-lg p-4">
           <div class="flex justify-between text-sm mb-2">
-            <span class="font-medium">${rep.name}</span>
+            <span class="font-medium">${esc(rep.name)}</span>
             <span class="text-gray-500 text-xs">${new Date(rep.created_at).toLocaleString('ru-RU')}</span>
           </div>
-          <p class="text-gray-300 text-sm leading-relaxed">${rep.content}</p>
+          <p class="text-gray-300 text-sm leading-relaxed">${esc(rep.content)}</p>
         </div>`).join('');
     }
 
@@ -288,6 +290,7 @@
       window.open(link, '_blank');
     }
 
+    function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
     document.getElementById('att-date').value = TODAY;
     document.getElementById('rep-date').value = TODAY;
     init().catch(() => { logout(); });

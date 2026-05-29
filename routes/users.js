@@ -24,6 +24,8 @@ router.put('/:id/role', role('director'), async (req, res) => {
   const { role: newRole } = req.body;
   if (!['employee','manager','director'].includes(newRole))
     return res.status(400).json({ error: 'Invalid role' });
+  if (Number(req.params.id) === Number(req.user.id))
+    return res.status(400).json({ error: 'Cannot change own role' });
   try {
     await db.users.setRole(Number(req.params.id), newRole);
     res.json({ ok: true });

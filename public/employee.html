@@ -190,11 +190,11 @@
           draggable="true"
           ondragstart="dragId=${t.id};this.classList.add('dragging')"
           ondragend="this.classList.remove('dragging')">
-        <div class="text-sm font-medium mb-1">${t.title}${typeBadge}</div>
-        ${t.description ? `<div class="text-xs text-gray-400 mb-1">${t.description}</div>` : ''}
-        ${t.due_date ? `<div class="text-xs text-gray-500 mb-1">рџ“… ${t.due_date}</div>` : ''}
+        <div class="text-sm font-medium mb-1">${esc(t.title)}${typeBadge}</div>
+        ${t.description ? `<div class="text-xs text-gray-400 mb-1">${esc(t.description)}</div>` : ''}
+        ${t.due_date ? `<div class="text-xs text-gray-500 mb-1">рџ“… ${esc(t.due_date)}</div>` : ''}
         ${t.created_by_name && t.created_by_name !== localStorage.getItem('name')
-          ? `<div class="text-xs text-gray-500 mb-1">РѕС‚: ${t.created_by_name}</div>` : ''}
+          ? `<div class="text-xs text-gray-500 mb-1">РѕС‚: ${esc(t.created_by_name)}</div>` : ''}
         ${next ? `<button onclick="event.stopPropagation();setStatus(${t.id},'${next}')"
           class="mt-1 w-full text-xs bg-blue-700 hover:bg-blue-600 px-2 py-1.5 rounded transition">${lbl}</button>` : ''}
       </div>`;
@@ -256,6 +256,7 @@
       }
     }
 
+    function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
     loadAtt();
     loadTasks();
   </script>
