@@ -8,7 +8,10 @@ const path = require('path');
 const app = express();
 
 app.use(helmet({ contentSecurityPolicy: false }));
-app.use(cors());
+app.use(cors({
+  origin: ['https://aghartu.onrender.com', 'http://localhost:3000'],
+  credentials: true
+}));
 app.use(rateLimit({ windowMs: 60_000, max: 120 }));
 app.use(express.json({ limit: '10kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -26,4 +29,4 @@ app.get('/director',   (_, res) => res.sendFile(path.join(__dirname, 'public', '
 app.get('*',           (_, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Ағарту: http://localhost:${PORT}`));
+app.listen(PORT, () => console.log('Aghartu: http://localhost:' + PORT));

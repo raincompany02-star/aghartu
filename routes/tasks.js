@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const db = require('../db');
 const { auth, role } = require('../middleware/auth');
 
@@ -8,7 +8,7 @@ router.use(auth);
 router.get('/', async (req, res) => {
   try {
     const allUsers = await db.users.all();
-    const uMap = Object.fromEntries(allUsers.map(u => [u.id, `${u.first_name} ${u.last_name}`]));
+    const uMap = Object.fromEntries(allUsers.map(u => [u.id, u.first_name + ' ' + u.last_name]));
     let tasks = await db.tasks.all();
     if (req.user.role === 'employee') {
       tasks = tasks.filter(t => t.assigned_to === Number(req.user.id) || t.assigned_to === null);
@@ -43,7 +43,15 @@ router.put('/:id/status', async (req, res) => {
   if (!['todo','process','done'].includes(status))
     return res.status(400).json({ error: 'Zharamsy status' });
   try {
-    await db.tasks.setStatus(Number(req.params.id), status);
+    const taskId = Number(req.params.id);
+    if (req.user.role === 'employee') {
+      const tasks = await db.tasks.all();
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return res.status(404).json({ error: 'Task not found' });
+      if (task.assigned_to !== null && task.assigned_to !== Number(req.user.id))
+        return res.status(403).json({ error: 'Ruksat zhok' });
+    }
+    await db.tasks.setStatus(taskId, status);
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: 'Server error' }); }
 });
